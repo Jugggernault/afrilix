@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { HeartIcon } from 'lucide-react';
 import StarRating from './StarRating';
 
-const VideoCard = ({ title, thumbnail, rating }) => {
+const VideoCard = ({ id, title, thumbnail, rating }) => {
   return (
-    <div className="relative flex-shrink-0 w-[160px] md:w-[200px] h-[240px] md:h-[300px] rounded-lg overflow-hidden">
+    <Link to={`/watch/${id}`} className="relative flex-shrink-0 w-[160px] md:w-[200px] h-[240px] md:h-[300px] rounded-lg overflow-hidden">
       <img 
         src={thumbnail} 
         alt={title} 
@@ -15,15 +16,20 @@ const VideoCard = ({ title, thumbnail, rating }) => {
           <h3 className="text-white text-sm md:text-base font-semibold mb-1 line-clamp-2">{title}</h3>
           <div className="flex justify-between items-center">
             <StarRating rating={rating} />
-            <button className="text-white hover:text-primary transition-colors">
+            <button 
+              className="text-white hover:text-primary transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                // Add to favorites logic here
+              }}
+            >
               <HeartIcon className="w-5 h-5" />
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
 export default VideoCard;
-

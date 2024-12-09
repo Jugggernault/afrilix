@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import CategorySelector from '../components/CategorySelector';
 import Section from '../components/Section';
-import Navbar from '../components/Navbar';
 import { videos, categories } from '../data/mockData';
 
 const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-  const [activeMenu, setActiveMenu] = useState('Accueil');
 
   return (
     <div className="min-h-screen w-full bg-black">
-      <main className="pb-16"> {/* Add padding bottom for navbar */}
+      <main className="pb-16">
         <HeroSection
           title="Film à la une"
           rating={4.5}
@@ -31,10 +30,8 @@ const HomePage = () => {
           </div>
         </div>
       </main>
-      <Navbar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
     </div>
   );
 };
 
 export default HomePage;
-

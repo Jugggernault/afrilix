@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import StarRating from './StarRating';
 import { PlayIcon, HeartIcon } from 'lucide-react';
 
@@ -17,14 +18,14 @@ const HeroSection = ({ title, rating, backgroundImage }) => {
             <span className="text-white ml-2">{rating.toFixed(1)}</span>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
-            <button className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-full hover:bg-primary-dark transition-colors">
+            <Link to="/watch" className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-full hover:bg-primary-dark transition-colors">
               <PlayIcon className="w-5 h-5 mr-2" />
               Lire la vidéo
-            </button>
-            <button className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-white/20 text-white rounded-full hover:bg-white/30 transition-colors backdrop-blur-sm">
+            </Link>
+            <Link to="/favoris" className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-white/20 text-white rounded-full hover:bg-white/30 transition-colors backdrop-blur-sm">
               <HeartIcon className="w-5 h-5 mr-2" />
               Ajouter aux favoris
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -33,4 +34,3 @@ const HeroSection = ({ title, rating, backgroundImage }) => {
 };
 
 export default HeroSection;
-

@@ -15,4 +15,3 @@ const Section = ({ title, videos }) => {
 };
 
 export default Section;
-

@@ -15,4 +15,3 @@ const NavItem = ({ icon: Icon, label, isActive, onClick }) => {
 };
 
 export default NavItem;
-
