@@ -1,14 +1,15 @@
 import React from 'react';
-import { StarIcon } from 'lucide-react';
+import { Star } from 'lucide-react';
 
-const StarRating = ({ rating }) => {
+const StarRating = ({ rating, onRatingChange, editable = false }) => {
+  const stars = [1, 2, 3, 4, 5];
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
 
   return (
-    <div className="flex items-center">
+    <div className="flex">
       {[...Array(5)].map((_, index) => (
-        <StarIcon
+        <Star
           key={index}
           className={`w-5 h-5 ${
             index < fullStars
@@ -16,8 +17,9 @@ const StarRating = ({ rating }) => {
               : index === fullStars && hasHalfStar
               ? 'text-yellow-400'
               : 'text-gray-300'
-          }`}
+          } ${editable ? 'cursor-pointer' : ''}`}
           fill={index < fullStars || (index === fullStars && hasHalfStar) ? 'currentColor' : 'none'}
+          onClick={() => editable && onRatingChange && onRatingChange(index + 1)}
         />
       ))}
     </div>
@@ -25,3 +27,4 @@ const StarRating = ({ rating }) => {
 };
 
 export default StarRating;
+

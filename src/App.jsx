@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
@@ -6,6 +5,7 @@ import ExplorerPage from './pages/ExplorerPage';
 import WatchPage from './pages/WatchPage';
 import FavoritesPage from './pages/FavoritesPage';
 import AccountPage from './pages/AccountPage';
+import MoviePage from './pages/MoviesPage';
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/explorer" element={<ExplorerPage />} />
           <Route path="/watch" element={<WatchPage />} />
-          <Route path="/watch/:id" element={<WatchPage />} />
+          <Route path="/watch/:id" element={<MoviePage />} />
           <Route path="/favoris" element={<FavoritesPage />} />
           <Route path="/compte" element={<AccountPage />} />
         </Routes>

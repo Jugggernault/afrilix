@@ -1,7 +1,10 @@
-import React from 'react';
+import { useState } from 'react';
 import { User, CreditCard, Settings } from 'lucide-react';
+import SubscriptionModal from '../components/SubscriptionModal';
 
 const AccountPage = () => {
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-20">
       <h1 className="text-2xl font-bold mb-6">Mon compte</h1>
@@ -26,7 +29,12 @@ const AccountPage = () => {
         <div className="bg-white/10 p-4 rounded-md">
           <p className="font-medium">Plan actuel : Premium</p>
           <p className="text-sm text-gray-400 mt-1">Prochain paiement : 15/06/2023</p>
-          <button className="mt-4 bg-primary text-white rounded-md px-4 py-2 hover:bg-primary-dark transition-colors">Gérer l'abonnement</button>
+          <button 
+            className="mt-4 bg-primary text-white rounded-md px-4 py-2 hover:bg-primary-dark transition-colors"
+            onClick={() => setIsSubscriptionModalOpen(true)}
+          >
+            Gérer l&apos;abonnement
+          </button>
         </div>
       </section>
       
@@ -49,8 +57,14 @@ const AccountPage = () => {
           </div>
         </div>
       </section>
+
+      <SubscriptionModal 
+        isOpen={isSubscriptionModalOpen} 
+        onClose={() => setIsSubscriptionModalOpen(false)} 
+      />
     </div>
   );
 };
 
 export default AccountPage;
+

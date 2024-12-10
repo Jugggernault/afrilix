@@ -33,3 +33,4 @@ const VideoCard = ({ id, title, thumbnail, rating }) => {
 };
 
 export default VideoCard;
+
