@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import StarRating from './StarRating';
 import { PlayIcon, HeartIcon } from 'lucide-react';
 
-const HeroSection = ({ title, rating, backgroundImage }) => {
+const HeroSection = ({id, title, rating, backgroundImage }) => {
   return (
     <div className="relative w-full h-[70vh] md:h-96">
       <div 
@@ -18,7 +18,7 @@ const HeroSection = ({ title, rating, backgroundImage }) => {
             <span className="text-white ml-2">{rating.toFixed(1)}</span>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Link to="/watch" className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-full hover:bg-primary-dark transition-colors">
+            <Link to={`/watch/${id}`} className="flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-full hover:bg-primary-dark transition-colors">
               <PlayIcon className="w-5 h-5 mr-2" />
               Lire la vidéo
             </Link>

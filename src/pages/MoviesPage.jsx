@@ -6,6 +6,8 @@ import StarRating from '../components/StarRating';
 import ReviewModal from '../components/ReviewModal';
 import Section from '../components/Section';
 import { BASE_URL } from '../utils';
+import { useAuth } from '../context/AuthContext';
+
 
 const MoviePage = () => {
   const { id } = useParams();
@@ -14,13 +16,18 @@ const MoviePage = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const { accessToken } = useAuth();
   useEffect(() => {
     const fetchMovie = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${BASE_URL}service/AFRILIX__Afrilix/0.0.1/video?id=${id}`);
+        const response = await fetch(`${BASE_URL}service/AFRILIX__Afrilix/0.0.1/video?id=${id}`,{
+        method: 'GET',
+        headers: {
+          'access-token': accessToken,
+        },
+      });
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des données');
         }

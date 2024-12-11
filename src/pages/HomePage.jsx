@@ -30,7 +30,7 @@ const HomePage = () => {
       }
 
       const data = await response.json();
-      setCategories(data);
+      setCategories(data.result);
     } catch (err) {
       setError(err.message);
     }
@@ -68,7 +68,8 @@ const HomePage = () => {
         <HeroSection
           title="Film à la une"
           rating={4.5}
-          backgroundImage="https://via.placeholder.com/1920x1080"
+          id={popularVideos[0].id}
+          backgroundImage={popularVideos[0].thumbnail}
         />
         <div className="px-4 py-6">
           <CategorySection title="Catégories" videos={shortVideos} categories={categories} />

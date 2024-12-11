@@ -1,4 +1,3 @@
-import React from 'react';
 
 const CategorySelector = ({ categories, selectedCategory, onSelectCategory }) => {
   return (
