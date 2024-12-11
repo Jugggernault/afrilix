@@ -1,23 +1,82 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Star, MessageCircle } from 'lucide-react';
+import { Star } from 'lucide-react';
 import VideoPlayer from '../components/VideoPlayer';
 import StarRating from '../components/StarRating';
 import ReviewModal from '../components/ReviewModal';
 import Section from '../components/Section';
-import { videos } from '../data/mockData';
+import { BASE_URL } from '../utils';
 
 const MoviePage = () => {
   const { id } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [similarMovies, setSimilarMovies] = useState([]);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  
-  // Simuler la récupération des données du film
-  const movie = videos.find(v => v.id.toString() === id) || videos[0];
-  const similarMovies = videos.slice(0, 4); // Simuler des films similaires
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`${BASE_URL}service/AFRILIX__Afrilix/0.0.1/video?id=${id}`);
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des données');
+        }
+        const data = await response.json();
+        if (data.resCode === "0" && data.result.length > 0) {
+          const movieData = data.result[0];
+          setMovie({
+            id: movieData.id,
+            title: movieData.name,
+            description: movieData.decription,
+            videoUrl: movieData.video,
+            thumbnail: movieData.thumbnail,
+            year: movieData.year,
+            rating: 4.5, // Rating par défaut ou récupéré ailleurs
+          });
+          // Simuler des films similaires (exemple : on pourrait les récupérer via une autre API)
+          setSimilarMovies([
+            {
+              id: '1',
+              title: 'Film Similaire 1',
+              thumbnail: movieData.thumbnail,
+            },
+            {
+              id: '2',
+              title: 'Film Similaire 2',
+              thumbnail: movieData.thumbnail,
+            },
+          ]);
+        } else {
+          throw new Error('Film introuvable');
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMovie();
+  }, [id]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-white">Chargement...</div>;
+  }
+
+  if (error) {
+    return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+  }
+
+  if (!movie) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-300">Aucune donnée disponible.</div>;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white pb-20">
-      <VideoPlayer videoUrl={movie.videoUrl || 'https://example.com/video.mp4'} />
+      <VideoPlayer videoUrl={movie.videoUrl} />
       
       <div className="px-4 py-6">
         <div className="flex justify-between items-start mb-4">
@@ -36,13 +95,12 @@ const MoviePage = () => {
           </button>
         </div>
 
-        <p className="text-gray-300 mb-6">{movie.description || "Description du film non disponible."}</p>
+        <p className="text-gray-300 mb-6">{movie.description}</p>
 
         <Section title="Films similaires" videos={similarMovies} />
 
         <h2 className="text-xl font-semibold mb-4">Commentaires</h2>
         <div className="space-y-4">
-          {/* Simuler des commentaires */}
           {[1, 2, 3].map(i => (
             <div key={i} className="bg-gray-800 p-4 rounded-lg">
               <div className="flex items-center mb-2">
@@ -69,4 +127,3 @@ const MoviePage = () => {
 };
 
 export default MoviePage;
-

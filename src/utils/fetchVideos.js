@@ -1,12 +1,11 @@
-import { useAuth } from "./../context/AuthContext";
+import { BASE_URL } from "./../utils";
 
-const fetchVideos = async () => {
-  const { accessToken, fetchAccessToken } = useAuth();
-
+const fetchVideos = async (accessToken, refreshToken) => {
   const makeRequest = async (token) => {
     try {
+      
       const response = await fetch(
-        `${BASE_URL}service/AFRILIX__Afrilix/0.0.1/all-videos`,
+        `${BASE_URL}service/AFRILIX__Afrilix/0.0.1/videos`,
         {
           method: "GET",
           headers: {
@@ -14,19 +13,17 @@ const fetchVideos = async () => {
           },
         }
       );
-      if (response.status === 401) {
-        throw new Error("Unauthorized");
-      }
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Unauthorized");
+        }
         throw new Error(`Erreur : ${response.status}`);
       }
       const data = await response.json();
       return data.result;
     } catch (error) {
-      if (error.message === "Unauthorized") {
-        // Si non autorisé, on récupère un nouveau token et on réessaie
-        await fetchAccessToken();
-        const newToken = accessToken; // Mis à jour par fetchAccessToken
+      if (error.message === "Unauthorized" && refreshToken) {
+        const newToken = await refreshToken();
         return makeRequest(newToken);
       }
       console.error(
@@ -39,6 +36,5 @@ const fetchVideos = async () => {
 
   return makeRequest(accessToken);
 };
-
 
 export default fetchVideos;

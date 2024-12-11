@@ -37,20 +37,23 @@ const HomePage = () => {
   }, []);
 
   const fetchAllData = useCallback(async () => {
+    if (!accessToken) {
+      await fetchAccessToken();
+    }
+    
     setLoading(true);
     try {
-      const token = await fetchAccessToken();
-      const { short, long, popular } = await fetchVideos(token);
+      const { short, long, popular } = await fetchVideos(accessToken, fetchAccessToken);
       setShortVideos(short);
       setLongVideos(long);
       setPopularVideos(popular);
-      await fetchCategories(token);
+      await fetchCategories(accessToken);
     } catch (err) {
-      setError(err.message);
+      setError('In ',err.message);
     } finally {
       setLoading(false);
     }
-  }, [fetchAccessToken, fetchCategories]);
+  }, [accessToken, fetchAccessToken, fetchCategories]);
 
   useEffect(() => {
     fetchAllData();
