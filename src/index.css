@@ -2,12 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Ensure proper viewport height on mobile */
-/* html, body {
-  @apply h-full w-full m-0 p-0;
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+/* Custom Styles - If needed, add any specific styles here */
+.horizontal-scroll {
+    overflow-x: auto;
+    white-space: nowrap;
+    /* Prevents wrapping to next line */
 }
 
-#root {
-  @apply h-full w-full;
-} */
+.horizontal-scroll::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar for WebKit-based browsers */
+}
+/* Masquer les barres de défilement */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+/* Hide scrollbar for Firefox */
+.horizontal-scroll {
+    scrollbar-width: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+.horizontal-scroll {
+    -ms-overflow-style: none;
+}

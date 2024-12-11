@@ -1,37 +1,63 @@
-import React from 'react'
+import { useEffect, useState, useCallback } from 'react';
 import HeroSection from '../components/HeroSection';
 import Section from '../components/Section';
-import { videos, categories } from '../data/mockData';
+import Loader from '../components/Loader';
 import CategorySection from '../components/CategorySection';
-import { BASE_URL,CLIENT_ID,CLIENT_SECRET } from '../utils';
+import { useAuth } from '../context/AuthContext';
+import fetchVideos from '../utils/fetchVideos';
+import { BASE_URL } from '../utils';
+
 const HomePage = () => {
-  const [categories, setCategories] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
-  const fetchCategories = async () => {
+  const { accessToken, fetchAccessToken } = useAuth();
+  const [shortVideos, setShortVideos] = useState([]);
+  const [longVideos, setLongVideos] = useState([]);
+  const [popularVideos, setPopularVideos] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchCategories = useCallback(async (token) => {
     try {
-      const response = await fetch(`${BASE_URL}/service/AFRILIX__Afrilix/0.0.1/categories`,{method:'GET',headers:{"access-token":'0000000001IYLiDVLSQT:nUhlbyfgpRZazP8nuYBOY/I1om34LWy4dYy50PpX6EA='}});
+      const response = await fetch(`${BASE_URL}service/AFRILIX__Afrilix/0.0.1/categories`, {
+        method: 'GET',
+        headers: {
+          'access-token': token,
+        },
+      });
+
       if (!response.ok) {
-        throw new Error(`Erreur : ${response.status}`);
+        throw new Error(`Erreur lors de la récupération des catégories : ${response.status}`);
       }
+
       const data = await response.json();
-      console.log(data)
-      setCategories(data); // Mettre à jour l'état des catégories
-      setLoading(false);    // Fin du chargement
+      setCategories(data);
     } catch (err) {
-      setError(err.message); // Mettre à jour l'état d'erreur
-      setLoading(false);     // Fin du chargement
+      setError(err.message);
     }
-  };
+  }, []);
 
-  // Utiliser useEffect pour appeler la fonction lors du premier rendu
-  React.useEffect(() => {
-    fetchCategories();
-  }, []); 
+  const fetchAllData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const token = await fetchAccessToken();
+      const { short, long, popular } = await fetchVideos(token);
+      setShortVideos(short);
+      setLongVideos(long);
+      setPopularVideos(popular);
+      await fetchCategories(token);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchAccessToken, fetchCategories]);
 
-  if (loading) {
-    return <p>Chargement des catégories...</p>;
-  }
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
+
+  if (loading) return <Loader />;
+  if (error) return <div className="text-red-500">{`Erreur : ${error}`}</div>;
 
   return (
     <div className="min-h-screen w-full bg-black">
@@ -42,12 +68,11 @@ const HomePage = () => {
           backgroundImage="https://via.placeholder.com/1920x1080"
         />
         <div className="px-4 py-6">
-        <CategorySection title="Catégories" videos={videos} categories={categories} />
+          <CategorySection title="Catégories" videos={shortVideos} categories={categories} />
           <div className="mt-6 space-y-8">
-            <Section title="Vidéos Courtes" videos={videos} />
-            <Section title="Vidéos Longues" videos={videos} />
-            <Section title="Les Plus Vues" videos={videos} />
-            <Section title="Recommandées pour Vous" videos={videos} />
+            <Section title="Vidéos Courtes" videos={shortVideos} />
+            <Section title="Vidéos Longues" videos={longVideos} />
+            <Section title="Les Plus Vues" videos={popularVideos} />
           </div>
         </div>
       </main>
@@ -56,3 +81,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

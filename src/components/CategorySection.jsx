@@ -7,7 +7,7 @@ const CategorySection = ({ title, videos, categories }) => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
   // Filtrer les vidéos en fonction de la catégorie sélectionnée
-  const filteredVideos = videos.filter((video) => video.category === selectedCategory);
+  const filteredVideos = videos.filter((video) => video.category === selectedCategory?.name);
 
   const handleSelectCategory = (category) => {
     setSelectedCategory(category);
