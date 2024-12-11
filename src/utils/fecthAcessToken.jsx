@@ -3,7 +3,7 @@ import {BASE_URL,CLIENT_ID,CLIENT_SECRET} from './../utils'
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [accessToken, setAccessToken] = useState(null);
+  const [accessToken, setAccessToken] = useState('0000000001IBmapYWaZt:QDI4GsAySmf+5N95L8emti5x5DQlCv33sLzL+q791eY=');
 
   // Fonction pour récupérer le token
   const fetchAccessToken = useCallback(async () => {
